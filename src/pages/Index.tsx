@@ -1,12 +1,19 @@
 import { Link } from "react-router-dom";
 import { Search } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { categories, products } from "@/data/products";
 import ItemCard from "@/components/ItemCard";
 import { motion } from "framer-motion";
+import { User } from "lucide-react";
 
 const Index = () => {
   const [search, setSearch] = useState("");
+  const [reviews, setReviews] = useState<any[]>([]);
+
+useEffect(() => {
+  const storedReviews = JSON.parse(localStorage.getItem("reviews") || "[]");
+  setReviews(storedReviews.slice(-6).reverse());
+}, []);
   const featured = products.filter((p) => p.rating >= 4.5).slice(0, 8);
 
   const filtered = search
@@ -90,7 +97,63 @@ const Index = () => {
           </div>
         </section>
       )}
+
+{/* Customer Reviews */}
+{reviews.length > 0 && (
+  <section className="container pb-12">
+    <h2 className="font-display text-2xl font-bold text-center mb-8">
+      Customer Reviews
+    </h2>
+
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      {reviews.map((review, i) => (
+        <div key={i} className="bg-white border rounded-xl p-5 shadow-sm">
+
+{/* Name + Avatar + Date */}
+
+<div className="flex items-center justify-between mb-3">
+
+<div className="flex items-center gap-3">
+
+<div className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center">
+<span className="text-sm font-semibold">👤</span>
+</div>
+
+<div>
+
+<p className="text-sm font-semibold">
+{review.name}
+</p>
+
+<p className="text-xs text-gray-400">
+{review.date}
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+{/* Rating */}
+
+<div className="text-yellow-500 text-lg mb-2">
+{"★".repeat(review.rating)}
+</div>
+
+{/* Feedback */}
+
+<p className="text-sm text-gray-600">
+{review.feedback}
+</p>
+
+</div>
+      ))}
     </div>
+  </section>
+)}
+
+</div>
   );
 };
 

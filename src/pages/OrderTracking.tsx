@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
@@ -14,6 +15,16 @@ const DefaultIcon = L.icon({
 L.Marker.prototype.options.icon = DefaultIcon;
 
 export default function OrderTracking() {
+  const [showFeedback, setShowFeedback] = useState(false);
+const [rating, setRating] = useState(0);
+const [feedback, setFeedback] = useState("");
+useEffect(() => {
+  const timer = setTimeout(() => {
+    setShowFeedback(true);
+  }, 10000);
+
+  return () => clearTimeout(timer);
+}, []);
 
   const bakery: [number, number] = [19.8762, 75.3433];
   const rider: [number, number] = [19.8785, 75.3475];
@@ -99,7 +110,71 @@ export default function OrderTracking() {
         </a>
 
       </div>
+     {showFeedback && (
+  <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
 
+    <div className="bg-white p-6 rounded-xl w-[350px] shadow-lg">
+
+      <h2 className="text-xl font-semibold mb-4">
+        Rate Your Delivery
+      </h2>
+
+      {/* Star Rating */}
+
+      <div className="flex gap-2 text-3xl mb-4">
+        {[1,2,3,4,5].map((star) => (
+  <span
+    key={star}
+    onClick={() => setRating(star)}
+    className={`cursor-pointer text-3xl ${
+      rating >= star ? "text-yellow-500" : "text-gray-300"
+    }`}
+  >
+    ★
+  </span>
+))}
+      </div>
+
+      {/* Feedback */}
+
+      <textarea
+        placeholder="Write your feedback..."
+        value={feedback}
+        onChange={(e)=>setFeedback(e.target.value)}
+        className="w-full border rounded-lg p-2 text-sm"
+      />
+
+      {/* Submit */}
+
+      <button
+        onClick={()=>{
+          const oldReviews = JSON.parse(localStorage.getItem("reviews") || "[]");
+
+          const customerName = localStorage.getItem("customerName") || "Customer";
+
+const newReview = {
+  name: customerName,
+  rating,
+  feedback,
+  date: new Date().toLocaleDateString()
+};
+
+          localStorage.setItem(
+            "reviews",
+            JSON.stringify([...oldReviews,newReview])
+          );
+
+          setShowFeedback(false);
+        }}
+        className="mt-4 w-full bg-primary text-white py-2 rounded-lg"
+      >
+        Submit Feedback
+      </button>
+
+    </div>
+
+  </div>
+)}
     </div>
   );
 }

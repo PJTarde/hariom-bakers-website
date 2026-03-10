@@ -50,14 +50,17 @@ const options = {
   name: "Hariom Bakers",
   description: "Order Payment",
 
-  handler: function (response: any) {
-    alert("Payment Successful!");
+ handler: function (response: any) {
+  alert("Payment Successful!");
 
-    console.log("Payment Response:", response);
+  console.log("Payment Response:", response);
 
-    clearCart();
-    navigate("/track-order");
-  },
+  // Save customer name for reviews
+  localStorage.setItem("customerName", form.name);
+
+  clearCart();
+  navigate("/track-order");
+},
 
   prefill: {
     name: form.name,
