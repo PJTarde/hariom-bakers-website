@@ -12,6 +12,7 @@ import CakeCustomization from "./pages/CakeCustomization";
 import Cart from "./pages/Cart";
 import Checkout from "./pages/Checkout";
 import NotFound from "./pages/NotFound";
+import OrderTracking from "./pages/OrderTracking";
 
 const queryClient = new QueryClient();
 
@@ -29,6 +30,7 @@ const App = () => (
             <Route path="/customize" element={<CakeCustomization />} />
             <Route path="/cart" element={<Cart />} />
             <Route path="/checkout" element={<Checkout />} />
+            <Route path="/track-order" element={<OrderTracking />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
           <Footer />

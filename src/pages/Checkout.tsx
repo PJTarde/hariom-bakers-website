@@ -56,7 +56,7 @@ const options = {
     console.log("Payment Response:", response);
 
     clearCart();
-    navigate("/");
+    navigate("/track-order");
   },
 
   prefill: {
